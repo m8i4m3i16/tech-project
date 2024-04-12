@@ -12,7 +12,7 @@ const Search = styled("div")(({ theme }) => ({
   position: "relative",
   margin: "0 auto",
   borderRadius: theme.shape.borderRadius,
-  border: alpha(theme.palette.grey[300], 0.9),
+  border: "1px solid lightgray",
   backgroundColor: alpha(theme.palette.grey[300], 0.8),
   width: "420px",
   display: "flex",
@@ -32,6 +32,7 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "black",
+  fontWeight: 500,
   width: "100%",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
@@ -41,7 +42,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchBar() {
   return (
-    <AppBar position="static" sx={{ bgcolor: "white", boxShadow: "none" }}>
+    <AppBar
+      position="static"
+      sx={{
+        bgcolor: "white",
+        boxShadow: "none",
+        borderBottom: "1px solid lightgray",
+      }}
+    >
       <Toolbar>
         <Search>
           {/* <Search defaultValue="" inputProps={{ "aria-label": "Without label" }}>
@@ -57,6 +65,7 @@ export default function SearchBar() {
           <StyledInputBase
             placeholder="輸入台／美股代號，查看公司價值"
             inputProps={{ "aria-label": "search" }}
+            sx={{ color: "black" }}
           />
         </Search>
       </Toolbar>
