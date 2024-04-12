@@ -10,7 +10,7 @@ export default function Home() {
         style={{
           display: "flex",
           justifyContent: "center",
-          marginTop: "50px",
+          marginTop: "20px",
         }}
       >
         <SideBar style={{ flexDirection: "column" }} />

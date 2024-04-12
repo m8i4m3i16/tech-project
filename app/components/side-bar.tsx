@@ -16,7 +16,7 @@ import {
   faI,
 } from "@fortawesome/free-solid-svg-icons";
 
-const StyledDiv = styled("div")({
+const StyledContainer = styled("div")({
   borderRight: "2px solid lightgray",
 });
 
@@ -52,7 +52,7 @@ const SideBar = () => {
   };
 
   return (
-    <StyledDiv>
+    <StyledContainer>
       <StyledWrap active={activeIndex === 0} onClick={() => handleClick(0)}>
         <FontAwesomeIcon icon={faB} style={{ color: "darkslategray" }} />
         <StyledParagraph active={activeIndex === 0}>最新動態</StyledParagraph>
@@ -102,7 +102,7 @@ const SideBar = () => {
         <FontAwesomeIcon icon={faI} style={{ color: "#4169e1" }} />
         <StyledParagraph active={activeIndex === 9}>產品組合</StyledParagraph>
       </StyledWrap>
-    </StyledDiv>
+    </StyledContainer>
   );
 };
 

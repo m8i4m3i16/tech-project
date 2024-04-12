@@ -14,7 +14,7 @@ const Search = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   border: "1px solid lightgray",
   backgroundColor: alpha(theme.palette.grey[300], 0.8),
-  width: "420px",
+  width: "360px",
   display: "flex",
   justifyContent: "end",
 }));
