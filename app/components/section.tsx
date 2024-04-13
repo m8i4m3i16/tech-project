@@ -92,7 +92,8 @@ const SectionTable = styled("div")(({ theme }) => ({
   // padding: "13px",
 }));
 
-const Section = () => {
+const Section = ({}) => {
+  //   console.log(apiData);
   const theme = useTheme();
   const [activeIndex, setActiveIndex] = useState(null);
   const handleClick = (index) => {
@@ -137,7 +138,7 @@ const Section = () => {
       <StyledSection>
         {/* 顯示當前的股票名稱+代碼 */}
         <SectionTop>
-          <p style={{ color: "#000" }}>台積電（2330）</p>
+          {/* <p style={{ color: "#000" }}>台積電（{{apiData && apiData.stock_id}}）</p> */}
         </SectionTop>
         {/* 股票圖表 */}
         <SectionGraph>

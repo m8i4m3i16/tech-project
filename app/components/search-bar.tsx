@@ -1,13 +1,12 @@
 "use client";
-import * as React from "react";
+import { useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-// import Select from "@mui/material/Select";
-// import MenuItem from "@mui/material/MenuItem";
 
+//UI樣式
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   margin: "0 auto",
@@ -19,15 +18,15 @@ const Search = styled("div")(({ theme }) => ({
   justifyContent: "end",
 }));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
+const StyledButton = styled("button")(({ theme }) => ({
+  position: "absolute",
   paddingRight: "6px",
   height: "100%",
-  position: "absolute",
   color: "grey",
-  // pointerEvents: "none",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  cursor: "pointer",
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -40,7 +39,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchBar() {
+export default function SearchBar({
+  stockIds,
+  stockNames,
+  handleSearchResults,
+}) {
   return (
     <AppBar
       position="static"
@@ -52,22 +55,15 @@ export default function SearchBar() {
     >
       <Toolbar>
         <Search>
-          {/* <Search defaultValue="" inputProps={{ "aria-label": "Without label" }}>
-          <MenuItem value="" disabled>
-            輸入台／美股代號，查看公司價值
-          </MenuItem>
-          <MenuItem value={10}>蘋果(Apple)</MenuItem>
-          <MenuItem value={20}>谷歌(Google)</MenuItem>
-          <MenuItem value={30}>微軟(Microsoft)</MenuItem> */}
-          <SearchIconWrapper>
+          <StyledButton>
             <SearchIcon />
-          </SearchIconWrapper>
+          </StyledButton>
           <StyledInputBase
             placeholder="輸入台／美股代號，查看公司價值"
             inputProps={{ "aria-label": "search" }}
-            sx={{ color: "black" }}
           />
         </Search>
+        <h1></h1>
       </Toolbar>
     </AppBar>
   );
