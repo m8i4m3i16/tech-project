@@ -28,6 +28,8 @@ const StyledWrap = styled("div")(({ theme, active }) => ({
   lineHeight: "35px",
   paddingLeft: "30px",
   marginRight: "30px",
+  width: "100px",
+  height: "50px",
   "&:active": {
     paddingLeft: "30px",
     borderLeft: `3px solid ${theme.palette.primary.main}`,

@@ -1,10 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
+
+interface SearchBarProps {
+  stockIds: number[];
+  stockNames: string[];
+  handleSearchResults: (result: string) => void;
+}
 
 //UI樣式
 const Search = styled("div")(({ theme }) => ({
@@ -43,7 +49,45 @@ export default function SearchBar({
   stockIds,
   stockNames,
   handleSearchResults,
-}) {
+}: SearchBarProps) {
+  const [filterSettings, setFilterSettings] = useState({
+    searchKey: "",
+  });
+
+  const clearSettings = () => {
+    setFilterSettings({
+      searchKey: "",
+    });
+  };
+
+  const filteredStocks = useMemo(() => {
+    const { searchKey } = filterSettings;
+
+    if (searchKey) {
+      const matchedIds = stockIds.filter((id) =>
+        id.toString().includes(searchKey)
+      );
+      const matchedNames = stockNames.filter((name) =>
+        name.includes(searchKey)
+      );
+      return [...matchedIds, ...matchedNames];
+    } else {
+      return [];
+    }
+  }, [stockIds, stockNames, filterSettings]);
+
+  const handleClick = () => {
+    console.log("Filtered Stocks:", filteredStocks); // 在這裡加入 console.log
+    handleSearchResults(filteredStocks.join(", "));
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      console.log("Filtered Stocks:", filteredStocks);
+      handleSearchResults(filteredStocks.join(", "));
+    }
+  };
+
   return (
     <AppBar
       position="static"
@@ -55,15 +99,21 @@ export default function SearchBar({
     >
       <Toolbar>
         <Search>
-          <StyledButton>
+          <StyledButton onClick={handleClick}>
             <SearchIcon />
           </StyledButton>
           <StyledInputBase
             placeholder="輸入台／美股代號，查看公司價值"
             inputProps={{ "aria-label": "search" }}
+            onKeyDown={handleKeyDown}
+            onChange={(e) =>
+              setFilterSettings({
+                ...filterSettings,
+                searchKey: e.target.value,
+              })
+            }
           />
         </Search>
-        <h1></h1>
       </Toolbar>
     </AppBar>
   );
