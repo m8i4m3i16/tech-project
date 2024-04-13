@@ -82,7 +82,6 @@ const SectionGraph = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   border: "1px solid lightgray",
   marginBottom: "10px",
-  // padding: "13px",
 }));
 
 const SectionTable = styled("div")(({ theme }) => ({
@@ -92,7 +91,6 @@ const SectionTable = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   border: "1px solid lightgray",
   marginBottom: "10px",
-  // padding: "13px",
 }));
 
 const Section = ({ stockIds, stockNames, searchResults }) => {
@@ -103,7 +101,6 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-  //搜尋結果發生變化時，更新foundStock
   useEffect(() => {
     if (searchResults.length > 0 && stockIds.length > 0) {
       const foundIndex = stockIds.indexOf(searchResults[0]);
@@ -112,8 +109,6 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
       } else {
         setFoundStock(null);
       }
-    } else {
-      setFoundStock(null);
     }
   }, [searchResults, stockIds, stockNames]);
 
@@ -155,13 +150,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
       <StyledSection>
         {/* 顯示當前的股票名稱+代碼 */}
         <SectionTop>
-          <p>
-            {/* {searchResults.length > 0 && stockIds.length > 0
-              ? `${stockNames[stockIds.indexOf(searchResults[0])] || ""}
-              （${searchResults[0]}）`
-              : ""} */}
-            {foundStock ? `${foundStock}（${searchResults[0]}）` : ""}
-          </p>
+          <p>{foundStock ? `${foundStock}（${searchResults[0]}）` : ""}</p>
         </SectionTop>
         {/* 股票圖表 */}
         <SectionGraph>
