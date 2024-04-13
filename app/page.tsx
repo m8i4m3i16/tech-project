@@ -42,7 +42,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <body style={{ backgroundColor: "#f2f2f2" }}>
       <SearchBar
         stockIds={stockIds}
         stockNames={stockNames}
@@ -62,6 +62,6 @@ export default function Home() {
           stockNames={searchResults.length > 0 ? searchResults : stockNames}
         />
       </div>
-    </>
+    </body>
   );
 }

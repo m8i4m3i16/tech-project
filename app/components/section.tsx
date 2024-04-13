@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
+import Table from "react-bootstrap/Table";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const StyledContainer = styled("div")(({ theme }) => ({
   display: "flex",
@@ -154,6 +156,24 @@ const Section = ({}) => {
         {/* 表格 */}
         <SectionTable>
           <StyledPrimary>詳細數據</StyledPrimary>
+          <Table striped bordered style={{ marginTop: "35px" }}>
+            <thead>
+              <tr>
+                <td>年度月份</td>
+                <td>Mark</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>每月營收</td>
+                <td>Mark</td>
+              </tr>
+              <tr>
+                <td>單月營收年增率（%）</td>
+                <td>Jacob</td>
+              </tr>
+            </tbody>
+          </Table>
         </SectionTable>
         <div
           style={{
