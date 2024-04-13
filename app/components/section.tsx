@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { useState, useEffect } from "react";
+import { styled } from "@mui/material/styles";
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -70,6 +70,7 @@ const SectionTop = styled("div")(({ theme }) => ({
   border: "1px solid lightgray",
   marginBottom: "10px",
   padding: "13px",
+  color: "#000",
 }));
 
 const SectionGraph = styled("div")(({ theme }) => ({
@@ -94,13 +95,27 @@ const SectionTable = styled("div")(({ theme }) => ({
   // padding: "13px",
 }));
 
-const Section = ({}) => {
-  //   console.log(apiData);
-  const theme = useTheme();
+const Section = ({ stockIds, stockNames, searchResults }) => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [foundStock, setFoundStock] = useState(null);
+
   const handleClick = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
+
+  //搜尋結果發生變化時，更新foundStock
+  useEffect(() => {
+    if (searchResults.length > 0 && stockIds.length > 0) {
+      const foundIndex = stockIds.indexOf(searchResults[0]);
+      if (foundIndex !== -1) {
+        setFoundStock(stockNames[foundIndex]);
+      } else {
+        setFoundStock(null);
+      }
+    } else {
+      setFoundStock(null);
+    }
+  }, [searchResults, stockIds, stockNames]);
 
   return (
     <StyledContainer>
@@ -140,7 +155,13 @@ const Section = ({}) => {
       <StyledSection>
         {/* 顯示當前的股票名稱+代碼 */}
         <SectionTop>
-          {/* <p style={{ color: "#000" }}>台積電（{{apiData && apiData.stock_id}}）</p> */}
+          <p>
+            {/* {searchResults.length > 0 && stockIds.length > 0
+              ? `${stockNames[stockIds.indexOf(searchResults[0])] || ""}
+              （${searchResults[0]}）`
+              : ""} */}
+            {foundStock ? `${foundStock}（${searchResults[0]}）` : ""}
+          </p>
         </SectionTop>
         {/* 股票圖表 */}
         <SectionGraph>

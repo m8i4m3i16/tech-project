@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -60,6 +60,11 @@ export default function SearchBar({
     });
   };
 
+  //初始化時設定一次搜尋結果
+  useEffect(() => {
+    handleSearchResults([]);
+  }, [handleSearchResults]);
+
   const filteredStocks = useMemo(() => {
     const { searchKey } = filterSettings;
 
@@ -70,23 +75,17 @@ export default function SearchBar({
       const matchedNames = stockNames.filter((name) =>
         name.includes(searchKey)
       );
-      return [...matchedIds, ...matchedNames];
+      const searchResults = [...matchedIds, ...matchedNames];
+      return searchResults;
     } else {
       return [];
     }
   }, [stockIds, stockNames, filterSettings]);
 
-  const handleClick = () => {
-    console.log("Filtered Stocks:", filteredStocks); // 在這裡加入 console.log
-    handleSearchResults(filteredStocks.join(", "));
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      console.log("Filtered Stocks:", filteredStocks);
-      handleSearchResults(filteredStocks.join(", "));
-    }
-  };
+  //搜尋關鍵字改變時更新搜尋結果
+  useEffect(() => {
+    handleSearchResults(filteredStocks);
+  }, [filteredStocks, handleSearchResults]);
 
   return (
     <AppBar
@@ -99,18 +98,14 @@ export default function SearchBar({
     >
       <Toolbar>
         <Search>
-          <StyledButton onClick={handleClick}>
+          <StyledButton>
             <SearchIcon />
           </StyledButton>
           <StyledInputBase
             placeholder="輸入台／美股代號，查看公司價值"
             inputProps={{ "aria-label": "search" }}
-            onKeyDown={handleKeyDown}
             onChange={(e) =>
-              setFilterSettings({
-                ...filterSettings,
-                searchKey: e.target.value,
-              })
+              setFilterSettings((c) => ({ ...c, searchKey: e.target.value }))
             }
           />
         </Search>

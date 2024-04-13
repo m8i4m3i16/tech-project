@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,7 +28,7 @@ const StyledWrap = styled("div")(({ theme, active }) => ({
   lineHeight: "35px",
   paddingLeft: "30px",
   marginRight: "30px",
-  width: "100px",
+  width: "120px",
   height: "50px",
   "&:active": {
     paddingLeft: "30px",
@@ -47,7 +47,14 @@ const StyledParagraph = styled("p")(({ theme, active }) => ({
 }));
 
 const SideBar = () => {
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(() => {
+    const storedIndex = localStorage.getItem("activeIndex");
+    return storedIndex ? parseInt(storedIndex, 10) : null;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("activeIndex", activeIndex);
+  }, [activeIndex]);
 
   const handleClick = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
