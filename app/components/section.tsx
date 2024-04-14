@@ -4,8 +4,10 @@ import { styled } from "@mui/material/styles";
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+//UI樣式
 const StyledContainer = styled("div")(({ theme }) => ({
   display: "flex",
+  marginBottom: "400px",
 }));
 
 const StyledPrimary = styled("div")(({ theme }) => ({
@@ -59,7 +61,7 @@ const StyledParagraph = styled("p")(({ theme, active }) => ({
   borderLeft: active ? `3px solid ${theme.palette.primary.main}` : "none",
 }));
 
-// section
+//Section
 const StyledSection = styled("div")(({ theme }) => ({}));
 
 const SectionTop = styled("div")(({ theme }) => ({
@@ -93,6 +95,19 @@ const SectionTable = styled("div")(({ theme }) => ({
   marginBottom: "10px",
 }));
 
+const StyledTdName = styled("td")(({ theme }) => ({
+  width: "220px",
+  fontWeight: "400",
+  color: "#666666",
+}));
+
+const StyledTdValue = styled("td")(({ theme }) => ({
+  width: "140px",
+  fontWeight: "200",
+  color: "#666666",
+  textAlign: "center",
+}));
+
 const Section = ({ stockIds, stockNames, searchResults }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [foundStockName, setFoundStockName] = useState(null);
@@ -102,6 +117,38 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     setActiveIndex(index); //讓畫面初始為0
     // setActiveIndex(activeIndex === index ? null : index);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNCAwOToxODo0MyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.K8mb247sGALJthXOhcgkVtWPI_Yx-d_ggi87pfwVieE";
+        const parameter = {
+          dataset: "TaiwanStockMonthRevenue",
+          data_id: "",
+          start_date: "2023-01-01",
+          end: "2023-12-31",
+        };
+        const response = await fetch(
+          "https://api.finmindtrade.com/api/v4/data",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(parameter),
+          }
+        );
+
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.log("Error fetching data", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (searchResults.length > 0 && stockIds.length > 0) {
@@ -173,47 +220,73 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
         {/* 表格 */}
         <SectionTable>
           <StyledPrimary>詳細數據</StyledPrimary>
-          <Table striped bordered style={{ marginTop: "35px" }}>
-            <thead>
+          <Table
+            striped
+            bordered
+            style={{ marginTop: "35px", display: "flex" }}
+          >
+            <tbody style={{ marginRight: "5px" }}>
               <tr>
-                <td>年度月份</td>
-                <td>Mark</td>
+                <StyledTdName>年度月份</StyledTdName>
               </tr>
-            </thead>
+              <tr>
+                <StyledTdName
+                  style={{
+                    borderTop: "1.5px solid lightgray",
+                    borderBottom: "1.5px solid lightgray",
+                  }}
+                >
+                  每月營收
+                </StyledTdName>
+              </tr>
+              <tr>
+                <StyledTdName>單月營收年增率（%）</StyledTdName>
+              </tr>
+            </tbody>
             <tbody>
               <tr>
-                <td>每月營收</td>
-                <td>Mark</td>
+                <StyledTdValue style={{ fontWeight: "400" }}>
+                  Mark
+                </StyledTdValue>
               </tr>
               <tr>
-                <td>單月營收年增率（%）</td>
-                <td>Jacob</td>
+                <StyledTdValue
+                  style={{
+                    borderTop: "1.5px solid lightgray",
+                    borderBottom: "1.5px solid lightgray",
+                  }}
+                >
+                  Mark
+                </StyledTdValue>
+              </tr>
+              <tr>
+                <StyledTdValue>Jacob</StyledTdValue>
               </tr>
             </tbody>
           </Table>
-        </SectionTable>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            color: "#000",
-            fontSize: "11px",
-            fontWeight: "200",
-            marginBottom: "200px",
-          }}
-        >
-          <div>
-            <p
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
-              圖表單位：千元，數據來自公開資訊觀測站
-            </p>
-            <p>網頁圖表歡迎轉貼引用，請註明出處為財報狗</p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              color: "#000",
+              fontSize: "11px",
+              fontWeight: "200",
+            }}
+          >
+            <div>
+              <p
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  margin: "0",
+                }}
+              >
+                圖表單位：千元，數據來自公開資訊觀測站
+              </p>
+              <p>網頁圖表歡迎轉貼引用，請註明出處為財報狗</p>
+            </div>
           </div>
-        </div>
+        </SectionTable>
       </StyledSection>
     </StyledContainer>
   );
