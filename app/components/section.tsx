@@ -94,12 +94,13 @@ const SectionTable = styled("div")(({ theme }) => ({
 }));
 
 const Section = ({ stockIds, stockNames, searchResults }) => {
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [foundStockName, setFoundStockName] = useState(null);
   const [foundStockId, setfoundStockId] = useState(null);
 
   const handleClick = (index) => {
-    setActiveIndex(activeIndex === index ? null : index);
+    setActiveIndex(index); //讓畫面初始為0
+    // setActiveIndex(activeIndex === index ? null : index);
   };
 
   useEffect(() => {
@@ -154,9 +155,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
       <StyledSection>
         {/* 顯示當前的股票名稱+代碼 */}
         <SectionTop>
-          <p>
-            {foundStockName ? `${foundStockName}（${foundStockId[0]}）` : ""}
-          </p>
+          <p>{foundStockName ? `${foundStockName}（${foundStockId}）` : ""}</p>
         </SectionTop>
         {/* 股票圖表 */}
         <SectionGraph>
