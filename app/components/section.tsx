@@ -2,7 +2,9 @@
 import { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "react-bootstrap/Table";
+import ReactECharts from "echarts-for-react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Password } from "@mui/icons-material";
 
 //UI樣式
 const StyledContainer = styled("div")(({ theme }) => ({
@@ -112,6 +114,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [foundStockName, setFoundStockName] = useState(null);
   const [foundStockId, setfoundStockId] = useState(null);
+  const [monthlyStockData, setMonthlyStockData] = useState([]);
 
   const handleClick = (index) => {
     setActiveIndex(index); //讓畫面初始為0
@@ -125,28 +128,25 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNCAwOToxODo0MyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.K8mb247sGALJthXOhcgkVtWPI_Yx-d_ggi87pfwVieE";
         const parameter = {
           dataset: "TaiwanStockMonthRevenue",
-          data_id: "",
+          data_id: "id",
           start_date: "2023-01-01",
           end: "2023-12-31",
         };
         const response = await fetch(
-          "https://api.finmindtrade.com/api/v4/data",
+          `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}`,
           {
-            method: "GET",
             headers: {
-              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(parameter),
           }
         );
-
-        const data = await response.json();
-        console.log(data);
+        const jsonData = await response.json();
+        setMonthlyStockData(jsonData.data || []);
       } catch (error) {
-        console.log("Error fetching data", error);
+        console.error("Error fetching US stock data:", error);
       }
     };
+
     fetchData();
   }, []);
 
@@ -163,6 +163,8 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
       }
     }
   }, [searchResults, stockIds, stockNames]);
+
+  //echarts
 
   return (
     <StyledContainer>
@@ -209,6 +211,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
         {/* 股票圖表 */}
         <SectionGraph>
           <StyledPrimary>每月營收</StyledPrimary>
+          {/* 篩選條件 */}
           <StyledSelect>
             <option value="3">近3年</option>
             <option value="5" selected>
@@ -216,6 +219,8 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
             </option>
             <option value="8">近8年</option>
           </StyledSelect>
+          {/* 圖表echarts */}
+          {/* <ReactECharts option={option} /> */}
         </SectionGraph>
         {/* 表格 */}
         <SectionTable>
