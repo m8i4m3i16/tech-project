@@ -41,27 +41,26 @@ export default function Home() {
     fetchData();
   }, []);
 
-  // 處理搜尋結果中的股票名稱或股票代碼，轉換成對應的股票代碼和股票名稱
+  //搜尋結果中的股票名稱或股票代碼，轉換成對應的股票代碼和股票名稱
   const getStockInfoFromResults = () => {
     const filteredIds = [];
     const filteredNames = [];
 
     searchResults.forEach((result) => {
-      // 檢查結果是否為股票代碼
+      //檢查結果是否為股票代碼
       const isId = stockIds.includes(result);
       if (isId) {
         filteredIds.push(result);
       } else {
-        // 如果不是股票代碼，則檢查是否為股票名稱
+        //如果不是股票代碼，則檢查是否為股票名稱
         const index = stockNames.indexOf(result);
         if (index !== -1) {
-          // 如果找到對應的股票名稱，則將其對應的股票代碼添加到 filteredIds 陣列中
+          //如果找到對應的股票名稱，則將其對應的股票代碼添加到 filteredIds 陣列中
           filteredIds.push(stockIds[index]);
           filteredNames.push(result);
         }
       }
     });
-
     return { stockIds: filteredIds, stockNames: filteredNames };
   };
 
