@@ -155,7 +155,9 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
       <StyledSection>
         {/* 顯示當前的股票名稱+代碼 */}
         <SectionTop>
-          <p>{foundStockName ? `${foundStockName}（${foundStockId}）` : ""}</p>
+          <p>
+            {foundStockName ? `${foundStockName}（${foundStockId[0]}）` : ""}
+          </p>
         </SectionTop>
         {/* 股票圖表 */}
         <SectionGraph>
