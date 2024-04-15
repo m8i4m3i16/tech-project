@@ -1,11 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
-import { Chart as chartJS } from "chart.js/auto";
-import { Bar, Line } from "react-chartjs-2";
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { yellow } from "@mui/material/colors";
+
+import { Chart as ChartJS, registerables } from "chart.js/auto";
+import { Bar, Line } from "react-chartjs-2";
+import zIndex from "@mui/material/styles/zIndex";
+ChartJS.register(...registerables);
 
 //UI樣式
 const StyledContainer = styled("div")(({ theme }) => ({
@@ -48,7 +50,7 @@ const StyledSelect = styled("select")(({ theme }) => ({
 
 //左側
 const StyledSide = styled("div")(({ theme }) => ({
-  marginRight: "20px",
+  marginRight: "40px",
 }));
 
 const StyledWrap = styled("div")(({ theme }) => ({
@@ -79,8 +81,6 @@ const SectionTop = styled("div")(({ theme }) => ({
 }));
 
 const SectionGraph = styled("div")(({ theme }) => ({
-  display: "flex",
-  justifyContent: "space-between",
   width: "700px",
   height: "500px",
   backgroundColor: "white",
@@ -116,32 +116,32 @@ const data = {
   labels: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
   datasets: [
     {
+      type: "line",
+      label: "月均價",
+      data: [400, 250, 300, 750, 500, 920, 680, 800],
+      fill: false,
+      backgroundColor: "rgba(178, 34, 34, 1)",
+      borderColor: "rgba(178, 34, 34)",
+      tension: 0.1,
+      pointRadius: 0.5,
+    },
+    {
       type: "bar",
       label: "每月營收",
       data: [200, 300, 400, 200, 600, 800, 450, 500],
-      backgroundColor: "rgba(250, 192, 19, 0.6)",
+      backgroundColor: "rgba(250, 192, 19, 0.8)",
       borderColor: "rgba(250, 192, 19)",
       borderWidth: 2,
-    },
-    {
-      type: "line",
-      label: "月均價",
-      data: [100, 200, 300, 400, 500, 600, 700, 800],
-      fill: false,
-      borderColor: "rgba(250, 99, 132, 1)",
-      tension: 0.7,
     },
   ],
 };
 
 const options = {
-  scales: {
-    y: {
-      beginAtZero: true,
-      title: {
-        display: true,
-        text: "千元",
-      },
+  plugins: {
+    title: {
+      display: true,
+      text: "千元",
+      align: "start",
     },
   },
 };
@@ -157,34 +157,34 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     // setActiveIndex(activeIndex === index ? null : index);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNCAwOToxODo0MyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.K8mb247sGALJthXOhcgkVtWPI_Yx-d_ggi87pfwVieE";
-        const parameter = {
-          dataset: "TaiwanStockMonthRevenue",
-          data_id: "id",
-          start_date: "2023-01-01",
-          end: "2023-12-31",
-        };
-        const response = await fetch(
-          `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const jsonData = await response.json();
-        setMonthlyStockData(jsonData.data || []);
-      } catch (error) {
-        console.error("Error fetching stock data:", error);
-      }
-    };
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       try {
+  //         const token =
+  //           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNCAwOToxODo0MyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.K8mb247sGALJthXOhcgkVtWPI_Yx-d_ggi87pfwVieE";
+  //         const parameter = {
+  //           dataset: "TaiwanStockMonthRevenue",
+  //           data_id: "id",
+  //           start_date: "2023-01-01",
+  //           end: "2023-12-31",
+  //         };
+  //         const response = await fetch(
+  //           `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}`,
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //             },
+  //           }
+  //         );
+  //         const jsonData = await response.json();
+  //         setMonthlyStockData(jsonData.data || []);
+  //       } catch (error) {
+  //         console.error("Error fetching stock data:", error);
+  //       }
+  //     };
 
-    fetchData();
-  }, []);
+  //     fetchData();
+  //   }, []);
 
   useEffect(() => {
     if (searchResults.length > 0 && stockIds.length > 0) {
@@ -244,35 +244,27 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
             {foundStockName ? `${foundStockName}（${foundStockId[0]}）` : ""}
           </p>
         </SectionTop>
+
         {/* 股票圖表 */}
         <SectionGraph>
-          <StyledPrimary>每月營收</StyledPrimary>
-          {/* 篩選條件 */}
-          <StyledSelect>
-            <option value="3">近3年</option>
-            <option value="5" selected>
-              近5年
-            </option>
-            <option value="8">近8年</option>
-          </StyledSelect>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <StyledPrimary>每月營收</StyledPrimary>
+            {/* 篩選條件 */}
+            <StyledSelect>
+              <option value="3">近3年</option>
+              <option value="5" selected>
+                近5年
+              </option>
+              <option value="8">近8年</option>
+            </StyledSelect>
+          </div>
+
           {/* 圖表 */}
-          {/* <Bar
-            data={{
-              labels: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
-              datasets: [
-                {
-                  label: "每月營收",
-                  data: [200, 300, 400, 200, 600, 800, 450, 500],
-                  backgroundColor: "rgba(250, 192, 19, 0.6)",
-                  border: "3px solid rgba(250, 192, 19)",
-                },
-              ],
-            }}
-          /> */}
-          {/* <Bar data={data} options={options} />
-          <Line data={data} options={options} /> */}
-          <Bar data={data} options={options} />
+          <div style={{ padding: "20px" }}>
+            <Bar data={data} options={options} />
+          </div>
         </SectionGraph>
+
         {/* 表格 */}
         <SectionTable>
           <StyledPrimary>詳細數據</StyledPrimary>
