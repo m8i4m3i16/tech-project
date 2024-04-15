@@ -1,10 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
+import { Chart as chartJS } from "chart.js/auto";
+import { Bar, Line } from "react-chartjs-2";
 import Table from "react-bootstrap/Table";
-import ReactECharts from "echarts-for-react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Password } from "@mui/icons-material";
+import { yellow } from "@mui/material/colors";
 
 //UI樣式
 const StyledContainer = styled("div")(({ theme }) => ({
@@ -110,6 +111,41 @@ const StyledTdValue = styled("td")(({ theme }) => ({
   textAlign: "center",
 }));
 
+//Graph
+const data = {
+  labels: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
+  datasets: [
+    {
+      type: "bar",
+      label: "每月營收",
+      data: [200, 300, 400, 200, 600, 800, 450, 500],
+      backgroundColor: "rgba(250, 192, 19, 0.6)",
+      borderColor: "rgba(250, 192, 19)",
+      borderWidth: 2,
+    },
+    {
+      type: "line",
+      label: "月均價",
+      data: [100, 200, 300, 400, 500, 600, 700, 800],
+      fill: false,
+      borderColor: "rgba(250, 99, 132, 1)",
+      tension: 0.7,
+    },
+  ],
+};
+
+const options = {
+  scales: {
+    y: {
+      beginAtZero: true,
+      title: {
+        display: true,
+        text: "千元",
+      },
+    },
+  },
+};
+
 const Section = ({ stockIds, stockNames, searchResults }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [foundStockName, setFoundStockName] = useState(null);
@@ -143,7 +179,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
         const jsonData = await response.json();
         setMonthlyStockData(jsonData.data || []);
       } catch (error) {
-        console.error("Error fetching US stock data:", error);
+        console.error("Error fetching stock data:", error);
       }
     };
 
@@ -219,8 +255,23 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
             </option>
             <option value="8">近8年</option>
           </StyledSelect>
-          {/* 圖表echarts */}
-          {/* <ReactECharts option={option} /> */}
+          {/* 圖表 */}
+          {/* <Bar
+            data={{
+              labels: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
+              datasets: [
+                {
+                  label: "每月營收",
+                  data: [200, 300, 400, 200, 600, 800, 450, 500],
+                  backgroundColor: "rgba(250, 192, 19, 0.6)",
+                  border: "3px solid rgba(250, 192, 19)",
+                },
+              ],
+            }}
+          /> */}
+          {/* <Bar data={data} options={options} />
+          <Line data={data} options={options} /> */}
+          <Bar data={data} options={options} />
         </SectionGraph>
         {/* 表格 */}
         <SectionTable>
