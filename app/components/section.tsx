@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Chart as ChartJS, registerables } from "chart.js/auto";
 import { Bar, Line } from "react-chartjs-2";
 import zIndex from "@mui/material/styles/zIndex";
+import { CheckBox } from "@mui/icons-material";
 ChartJS.register(...registerables);
 
 //UI樣式
@@ -129,9 +130,10 @@ const data = {
       type: "bar",
       label: "每月營收",
       data: [200, 300, 400, 200, 600, 800, 450, 500],
-      backgroundColor: "rgba(250, 192, 19, 0.8)",
+      backgroundColor: "rgba(250, 192, 19, 0.6)",
       borderColor: "rgba(250, 192, 19)",
-      borderWidth: 2,
+      borderWidth: 1,
+      barThickness: 10,
     },
   ],
 };
@@ -262,6 +264,24 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
           {/* 圖表 */}
           <div style={{ padding: "20px" }}>
             <Bar data={data} options={options} />
+          </div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <label style={{ marginRight: "10px" }}>
+              <input
+                style={{ marginRight: "3px" }}
+                type="checkbox"
+                name="revenue"
+              />
+              每月營收
+            </label>
+            <label>
+              <input
+                style={{ marginRight: "3px" }}
+                type="checkbox"
+                name="averagePrice"
+              />
+              月均價
+            </label>
           </div>
         </SectionGraph>
 
