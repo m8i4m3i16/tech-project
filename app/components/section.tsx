@@ -204,24 +204,23 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   }, [searchResults, stockIds, stockNames]);
 
   //計算單月營收年增率
-  const calculateRevenueGrowthRate = (monthlyData) => {
-    const thisYearData = monthlyData.filter(
-      (data) => data.revenue_year === new Date().getFullYear()
-    );
-    const lastYearData = monthlyData.filter(
-      (data) => data.revenue_year === new Date().getFullYear() - 1
-    );
+  const calculateRevenueGrowthRate = (monthlyStockData, currentIndex) => {
+    //確定有數據進行計算
+    if (currentIndex <= 0 || currentIndex >= monthlyStockData.length) {
+      return 0;
+    }
 
-    const thisYearRevenueSum = thisYearData.reduce(
-      (total, data) => total + data.revenue,
-      0
-    );
-    const lastYearRevenueSum = lastYearData.reduce(
-      (total, data) => total + data.revenue,
-      0
-    );
+    const currentMonthRevenue = monthlyStockData[currentIndex].revenue; //當前月份營收
+    const previousMonthRevenue = monthlyStockData[currentIndex - 1].revenue; //前一個月份營收
 
-    return ((thisYearRevenueSum / lastYearRevenueSum - 1) * 100).toFixed(2);
+    if (previousMonthRevenue === 0) {
+      return 0;
+    }
+
+    //計算單月營收年增率（套公式）
+    const growthRate = (currentMonthRevenue / previousMonthRevenue - 1) * 100;
+
+    return growthRate.toFixed(2); //四捨五入取到第二位
   };
 
   return (
@@ -321,8 +320,8 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
               <tr>
                 <StyledTdName
                   style={{
-                    borderTop: "1.5px solid lightgray",
-                    borderBottom: "1.5px solid lightgray",
+                    borderTop: "1px solid lightgray",
+                    borderBottom: "1px solid lightgray",
                   }}
                 >
                   每月營收
@@ -335,7 +334,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
 
             <tbody>
               {/* map月份 */}
-              <tr style={{ display: "flex" }}>
+              <tr style={{ display: "flex", fontWeight: "600" }}>
                 {monthlyStockData.map((monthData, index) => (
                   <StyledTrValue key={index}>
                     {monthData.revenue_year}
@@ -357,7 +356,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
               <tr style={{ display: "flex" }}>
                 {monthlyStockData.map((monthData, index) => (
                   <StyledTrValue key={index}>
-                    {calculateRevenueGrowthRate(monthlyStockData)}
+                    {calculateRevenueGrowthRate(monthlyStockData, index)}
                   </StyledTrValue>
                 ))}
               </tr>
