@@ -90,7 +90,7 @@ const SectionGraph = styled("div")(({ theme }) => ({
 
 const SectionTable = styled("div")(({ theme }) => ({
   width: "700px",
-  height: "200px",
+  height: "240px",
   backgroundColor: "white",
   borderRadius: theme.shape.borderRadius,
   border: "1px solid lightgray",
