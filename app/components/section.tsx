@@ -158,33 +158,34 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   };
 
   //串接每月營收API
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const token =
-  //           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNCAwOToxODo0MyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.K8mb247sGALJthXOhcgkVtWPI_Yx-d_ggi87pfwVieE";
-  //         const parameter = {
-  //           dataset: "TaiwanStockMonthRevenue",
-  //           start_date: "2015-01-01",
-  //           end: "2023-12-31",
-  //         };
-  //         const response = await fetch(
-  //           `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}`,
-  //           {
-  //             headers: {
-  //               Authorization: `Bearer ${token}`,
-  //             },
-  //           }
-  //         );
-  //         const jsonData = await response.json();
-  //         setMonthlyStockData(jsonData.data || []);
-  //       } catch (error) {
-  //         console.error("Error fetching stock data:", error);
-  //       }
-  //     };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token =
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNSAyMTo1MDowMyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.lQvheRS_nKp6NruDqGymlBY4l8MSP3GWgdiMD4F9-30";
+        const parameter = {
+          dataset: "TaiwanStockMonthRevenue",
+          data_id: { stockIds },
+          start_date: "2015-01-01",
+          end: "2023-12-31",
+        };
+        const response = await fetch(
+          `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}&data_id={stockIds}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const jsonData = await response.json();
+        setMonthlyStockData(jsonData.data || []);
+      } catch (error) {
+        console.error("Error fetching stock data:", error);
+      }
+    };
 
-  //     fetchData();
-  //   }, []);
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (searchResults.length > 0 && stockIds.length > 0) {
