@@ -95,16 +95,17 @@ const SectionTable = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   border: "1px solid lightgray",
   marginBottom: "10px",
+  overflow: "auto",
 }));
 
-const StyledTdName = styled("td")(({ theme }) => ({
+const StyledTdName = styled("div")(({ theme }) => ({
   width: "220px",
   fontWeight: "400",
   color: "#666666",
 }));
 
-const StyledTdValue = styled("td")(({ theme }) => ({
-  width: "140px",
+const StyledTrValue = styled("tr")(({ theme }) => ({
+  width: "180px",
   fontWeight: "200",
   color: "#666666",
   textAlign: "center",
@@ -152,6 +153,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   const [foundStockId, setfoundStockId] = useState(null);
   const [monthlyStockData, setMonthlyStockData] = useState([]);
 
+  const monthData = [2020, 2021, 2022, 2023];
   const handleClick = (index) => {
     setActiveIndex(index); //讓畫面初始為0
     // setActiveIndex(activeIndex === index ? null : index);
@@ -165,12 +167,12 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNSAyMTo1MDowMyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.lQvheRS_nKp6NruDqGymlBY4l8MSP3GWgdiMD4F9-30";
         const parameter = {
           dataset: "TaiwanStockMonthRevenue",
-          data_id: { stockIds },
+          data_id: 2330,
           start_date: "2015-01-01",
           end: "2023-12-31",
         };
         const response = await fetch(
-          `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}&data_id={stockIds}`,
+          `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}&data_id=${parameter.data_id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -201,7 +203,26 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     }
   }, [searchResults, stockIds, stockNames]);
 
-  //echarts
+  //計算單月營收年增率
+  const calculateRevenueGrowthRate = (monthlyData) => {
+    const thisYearData = monthlyData.filter(
+      (data) => data.revenue_year === new Date().getFullYear()
+    );
+    const lastYearData = monthlyData.filter(
+      (data) => data.revenue_year === new Date().getFullYear() - 1
+    );
+
+    const thisYearRevenueSum = thisYearData.reduce(
+      (total, data) => total + data.revenue,
+      0
+    );
+    const lastYearRevenueSum = lastYearData.reduce(
+      (total, data) => total + data.revenue,
+      0
+    );
+
+    return ((thisYearRevenueSum / lastYearRevenueSum - 1) * 100).toFixed(2);
+  };
 
   return (
     <StyledContainer>
@@ -296,6 +317,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
               <tr>
                 <StyledTdName>年度月份</StyledTdName>
               </tr>
+
               <tr>
                 <StyledTdName
                   style={{
@@ -310,50 +332,60 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
                 <StyledTdName>單月營收年增率（%）</StyledTdName>
               </tr>
             </tbody>
+
             <tbody>
-              <tr>
-                <StyledTdValue style={{ fontWeight: "400" }}>
-                  2023
-                </StyledTdValue>
+              {/* map月份 */}
+              <tr style={{ display: "flex" }}>
+                {monthlyStockData.map((monthData, index) => (
+                  <StyledTrValue key={index}>
+                    {monthData.revenue_year}
+                    {monthData.revenue_month.toString().padStart(2, "0")}
+                  </StyledTrValue>
+                ))}
               </tr>
-              <tr>
-                <StyledTdValue
-                  style={{
-                    borderTop: "1.5px solid lightgray",
-                    borderBottom: "1.5px solid lightgray",
-                  }}
-                >
-                  587,040
-                </StyledTdValue>
+
+              {/* map營收 */}
+              <tr style={{ display: "flex" }}>
+                {monthlyStockData.map((monthData, index) => (
+                  <StyledTrValue key={index}>
+                    {monthData.revenue.toLocaleString()}
+                  </StyledTrValue>
+                ))}
               </tr>
-              <tr>
-                <StyledTdValue>53.65</StyledTdValue>
+
+              {/* map單月營收年增率（%） */}
+              <tr style={{ display: "flex" }}>
+                {monthlyStockData.map((monthData, index) => (
+                  <StyledTrValue key={index}>
+                    {calculateRevenueGrowthRate(monthlyStockData)}
+                  </StyledTrValue>
+                ))}
               </tr>
             </tbody>
           </Table>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              color: "#000",
-              fontSize: "11px",
-              fontWeight: "200",
-            }}
-          >
-            <div>
-              <p
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  margin: "0",
-                }}
-              >
-                圖表單位：千元，數據來自公開資訊觀測站
-              </p>
-              <p>網頁圖表歡迎轉貼引用，請註明出處為財報狗</p>
-            </div>
-          </div>
         </SectionTable>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            color: "#000",
+            fontSize: "11px",
+            fontWeight: "200",
+          }}
+        >
+          <div>
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                margin: "0",
+              }}
+            >
+              圖表單位：千元，數據來自公開資訊觀測站
+            </p>
+            <p>網頁圖表歡迎轉貼引用，請註明出處為財報狗</p>
+          </div>
+        </div>
       </StyledSection>
     </StyledContainer>
   );
