@@ -6,8 +6,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { Chart as ChartJS, registerables } from "chart.js/auto";
 import { Bar, Line } from "react-chartjs-2";
-import zIndex from "@mui/material/styles/zIndex";
-import { CheckBox } from "@mui/icons-material";
 ChartJS.register(...registerables);
 
 //UI樣式
@@ -159,6 +157,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     // setActiveIndex(activeIndex === index ? null : index);
   };
 
+  //串接每月營收API
   //   useEffect(() => {
   //     const fetchData = async () => {
   //       try {
@@ -166,8 +165,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   //           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNCAwOToxODo0MyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.K8mb247sGALJthXOhcgkVtWPI_Yx-d_ggi87pfwVieE";
   //         const parameter = {
   //           dataset: "TaiwanStockMonthRevenue",
-  //           data_id: "id",
-  //           start_date: "2023-01-01",
+  //           start_date: "2015-01-01",
   //           end: "2023-12-31",
   //         };
   //         const response = await fetch(
@@ -314,7 +312,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
             <tbody>
               <tr>
                 <StyledTdValue style={{ fontWeight: "400" }}>
-                  Mark
+                  2023
                 </StyledTdValue>
               </tr>
               <tr>
@@ -324,11 +322,11 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
                     borderBottom: "1.5px solid lightgray",
                   }}
                 >
-                  Mark
+                  587,040
                 </StyledTdValue>
               </tr>
               <tr>
-                <StyledTdValue>Jacob</StyledTdValue>
+                <StyledTdValue>53.65</StyledTdValue>
               </tr>
             </tbody>
           </Table>
