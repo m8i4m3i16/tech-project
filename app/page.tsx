@@ -14,6 +14,9 @@ export default function Home() {
   const [usStockIds, setUsStockIds] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
+  const [stockMatch, setStockMatch] = useState([]); //antd
+
+  //串接台美股API
   useEffect(() => {
     const fetchTaiwanStockData = async () => {
       try {
@@ -114,6 +117,7 @@ export default function Home() {
           stockIds={[...taiwanStockIds, ...usStockIds]}
           stockNames={[...taiwanStockNames, ...usStockNames]}
           searchResults={searchResults}
+          handleSearchResults={handleSearchResults}
         />
       </div>
     </body>

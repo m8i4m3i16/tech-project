@@ -200,35 +200,69 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     // setActiveIndex(activeIndex === index ? null : index);
   };
 
-  //串接每月營收API
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNSAyMTo1MDowMyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.lQvheRS_nKp6NruDqGymlBY4l8MSP3GWgdiMD4F9-30";
-        const parameter = {
-          dataset: "TaiwanStockMonthRevenue",
-          data_id: 2330,
-          start_date: "2016-01-01",
-          end: "2023-12-31",
-        };
-        const response = await fetch(
-          `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}&data_id=${parameter.data_id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const jsonData = await response.json();
-        setMonthlyStockData(jsonData.data || []);
-      } catch (error) {
-        console.error("Error fetching stock data:", error);
-      }
-    };
+  //串接每月營收API（原始）
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       try {
+  //         const token =
+  //           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNSAyMTo1MDowMyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.lQvheRS_nKp6NruDqGymlBY4l8MSP3GWgdiMD4F9-30";
+  //         const parameter = {
+  //           dataset: "TaiwanStockMonthRevenue",
+  //           data_id: 2330,
+  //           start_date: "2016-01-01",
+  //           end: "2023-12-31",
+  //         };
+  //         const response = await fetch(
+  //           `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}&data_id=${parameter.data_id}`,
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //             },
+  //           }
+  //         );
+  //         const jsonData = await response.json();
+  //         setMonthlyStockData(jsonData.data || []);
+  //       } catch (error) {
+  //         console.error("Error fetching stock data:", error);
+  //       }
+  //     };
+  //     fetchData();
+  //   }, []);
 
-    fetchData();
-  }, []);
+  //串接每月營收API（改）
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       try {
+  //         const token =
+  //           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNSAyMTo1MDowMyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.lQvheRS_nKp6NruDqGymlBY4l8MSP3GWgdiMD4F9-30";
+
+  //         const allStockData = await Promise.all(
+  //           stockIds.map(async (id) => {
+  //             const parameter = {
+  //               dataset: "TaiwanStockMonthRevenue",
+  //               data_id: id,
+  //               start_date: "2016-01-01",
+  //               end: "2023-12-31",
+  //             };
+  //             const response = await fetch(
+  //               `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}&data_id=${parameter.data_id}`,
+  //               {
+  //                 headers: {
+  //                   Authorization: `Bearer ${token}`,
+  //                 },
+  //               }
+  //             );
+  //             const jsonData = await response.json();
+  //             return jsonData.data || [];
+  //           })
+  //         );
+  //         setMonthlyStockData(allStockData);
+  //       } catch (error) {
+  //         console.error("Error fetching stock data:", error);
+  //       }
+  //     };
+  //     fetchData();
+  //   }, [stockIds]);
 
   useEffect(() => {
     if (searchResults.length > 0 && stockIds.length > 0) {
@@ -378,30 +412,48 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
             <tbody>
               {/* map月份 */}
               <tr style={{ display: "flex", fontWeight: "600" }}>
-                {monthlyStockData.map((monthData, index) => (
-                  <StyledTrValue key={index}>
-                    {monthData.revenue_year}
-                    {monthData.revenue_month.toString().padStart(2, "0")}
-                  </StyledTrValue>
-                ))}
+                {foundStockName &&
+                Array.isArray(monthlyStockData) &&
+                monthlyStockData.length > 0 ? (
+                  <>
+                    {monthlyStockData.map((monthData, index) => (
+                      <StyledTrValue key={index}>
+                        {monthData.revenue_year}
+                        {monthData.revenue_month.toString().padStart(2, "0")}
+                      </StyledTrValue>
+                    ))}
+                  </>
+                ) : null}
               </tr>
 
               {/* map營收 */}
               <tr style={{ display: "flex" }}>
-                {monthlyStockData.map((monthData, index) => (
-                  <StyledTrValue key={index}>
-                    {monthData.revenue.toLocaleString()}
-                  </StyledTrValue>
-                ))}
+                {foundStockName &&
+                Array.isArray(monthlyStockData) &&
+                monthlyStockData.length > 0 ? (
+                  <>
+                    {monthlyStockData.map((monthData, index) => (
+                      <StyledTrValue key={index}>
+                        {monthData.revenue.toLocaleString()}
+                      </StyledTrValue>
+                    ))}
+                  </>
+                ) : null}
               </tr>
 
               {/* map單月營收年增率（%） */}
               <tr style={{ display: "flex" }}>
-                {monthlyStockData.map((monthData, index) => (
-                  <StyledTrValue key={index}>
-                    {calculateRevenueGrowthRate(monthlyStockData, index)}
-                  </StyledTrValue>
-                ))}
+                {foundStockName &&
+                Array.isArray(monthlyStockData) &&
+                monthlyStockData.length > 0 ? (
+                  <>
+                    {monthlyStockData.map((monthData, index) => (
+                      <StyledTrValue key={index}>
+                        {calculateRevenueGrowthRate(monthlyStockData, index)}
+                      </StyledTrValue>
+                    ))}
+                  </>
+                ) : null}
               </tr>
             </tbody>
           </Table>

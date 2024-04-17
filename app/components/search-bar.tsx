@@ -6,6 +6,8 @@ import Toolbar from "@mui/material/Toolbar";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 
+import { Card } from "antd";
+
 interface SearchBarProps {
   stockIds: number[];
   stockNames: string[];
@@ -53,11 +55,53 @@ export default function SearchBar({
   const [filterSettings, setFilterSettings] = useState({
     searchKey: "",
   });
+  const [stockMatch, setStockMatch] = useState([]); //搜尋時會找到符合條件的
+
+  // const searchAutocomplete = (text) => {
+  //   //根據輸入的文字生成正規表達式
+  //   const regex = new RegExp(
+  //     `^${text}\\d{0,3}$|^${text.toUpperCase()}[a-zA-Z]{0,4}$`
+  //   );
+  //   const idMatches = stockIds.filter((id) => regex.test(id.toString()));
+  //   setStockMatch(idMatches);
+  // };
+  const searchAutocomplete = (text) => {
+    // 根據輸入的文字生成正規表達式
+    const regex = new RegExp(
+      `^${text}\\d{0,3}$|^${text.toUpperCase()}[a-zA-Z]{0,4}$`
+    );
+
+    // 過濾出符合正規表達式條件的股票代號及其對應的股票名稱
+    const matchedStocks = stockIds.reduce((acc, id, index) => {
+      if (regex.test(id.toString())) {
+        acc.push({ id, name: stockNames[index] });
+      }
+      return acc;
+    }, []);
+
+    // 將符合條件的股票代號及其對應的股票名稱設置為 state
+    setStockMatch(matchedStocks);
+  };
+
+  //處理搜尋輸入聯想變化
+  const handleSearchInputChange = (e) => {
+    const searchKey = e.target.value;
+    setFilterSettings((prevSettings) => ({ ...prevSettings, searchKey }));
+    searchAutocomplete(searchKey);
+  };
+
+  //處理搜尋輸入聯想變化 -> 按下 Enter 時停止自動聯想
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setStockMatch([]);
+    }
+  };
 
   const clearSettings = () => {
     setFilterSettings({
       searchKey: "",
     });
+    setStockMatch();
   };
 
   //初始化時設定一次搜尋結果
@@ -107,7 +151,37 @@ export default function SearchBar({
             onChange={(e) =>
               setFilterSettings((c) => ({ ...c, searchKey: e.target.value }))
             }
+            onChangeCapture={(e) => searchAutocomplete(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
+          {filterSettings.searchKey && (
+            <div
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                width: "100%",
+                color: "black",
+              }}
+            >
+              {stockMatch.map((stockInfo, index) => (
+                <Card
+                  key={index}
+                  style={{
+                    width: "100%",
+                    border: "none",
+                    borderRadius: 0,
+                    backgroundColor: "rgba(242, 242, 242, 0.75)",
+                    padding: 0,
+                    margin: 0,
+                    lineHeight: "10px",
+                  }}
+                >
+                  {stockInfo.name}（{stockInfo.id}）
+                </Card>
+              ))}
+            </div>
+          )}
         </Search>
       </Toolbar>
     </AppBar>
