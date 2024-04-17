@@ -229,7 +229,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   //     fetchData();
   //   }, []);
 
-  //串接每月營收API（改）
+  //串接每月營收API（取得全部）
   //   useEffect(() => {
   //     const fetchData = async () => {
   //       try {
