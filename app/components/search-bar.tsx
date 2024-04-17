@@ -55,31 +55,20 @@ export default function SearchBar({
   const [filterSettings, setFilterSettings] = useState({
     searchKey: "",
   });
-  const [stockMatch, setStockMatch] = useState([]); //搜尋時會找到符合條件的
+  const [stockMatch, setStockMatch] = useState([]); //處理Autocomplete
 
-  // const searchAutocomplete = (text) => {
-  //   //根據輸入的文字生成正規表達式
-  //   const regex = new RegExp(
-  //     `^${text}\\d{0,3}$|^${text.toUpperCase()}[a-zA-Z]{0,4}$`
-  //   );
-  //   const idMatches = stockIds.filter((id) => regex.test(id.toString()));
-  //   setStockMatch(idMatches);
-  // };
   const searchAutocomplete = (text) => {
-    // 根據輸入的文字生成正規表達式
     const regex = new RegExp(
       `^${text}\\d{0,3}$|^${text.toUpperCase()}[a-zA-Z]{0,4}$`
     );
 
-    // 過濾出符合正規表達式條件的股票代號及其對應的股票名稱
+    //過濾符合正規表達式條件的股票代號及其對應的股票名稱
     const matchedStocks = stockIds.reduce((acc, id, index) => {
       if (regex.test(id.toString())) {
         acc.push({ id, name: stockNames[index] });
       }
       return acc;
     }, []);
-
-    // 將符合條件的股票代號及其對應的股票名稱設置為 state
     setStockMatch(matchedStocks);
   };
 
