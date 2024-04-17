@@ -196,7 +196,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   //篩選----
 
   const handleClick = (index) => {
-    setActiveIndex(index); //讓畫面初始為0
+    setActiveIndex(index); //讓side-bar畫面初始為每月營收
     // setActiveIndex(activeIndex === index ? null : index);
   };
 
@@ -209,7 +209,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
         const parameter = {
           dataset: "TaiwanStockMonthRevenue",
           data_id: 2330,
-          start_date: "2015-01-01",
+          start_date: "2016-01-01",
           end: "2023-12-31",
         };
         const response = await fetch(
