@@ -153,7 +153,48 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   const [foundStockId, setfoundStockId] = useState(null);
   const [monthlyStockData, setMonthlyStockData] = useState([]);
 
-  const monthData = [2020, 2021, 2022, 2023];
+  //篩選----
+  const [timeRange, setTimeRange] = useState("5");
+  const [chartData, setChartData] = useState(data); //存儲圖表數據
+
+  //處理時間範圍變化的函數
+  const handleTimeRangeChange = (value) => {
+    setTimeRange(value);
+  };
+
+  // 根據所選擇的時間範圍更新圖表數據
+  useEffect(() => {
+    // 根據timeRange更新圖表數據
+    // 這裡可以根據不同的時間範圍從後端獲取不同的數據，或者根據已有數據進行篩選
+    // 示範：根據timeRange從data中篩選相應的數據
+    let newData = {};
+    switch (timeRange) {
+      case "3":
+        newData = {
+          labels: [2021, 2022, 2023],
+          datasets: data.datasets,
+        };
+        break;
+      case "5":
+        newData = {
+          labels: [2019, 2020, 2021, 2022, 2023],
+          datasets: data.datasets,
+        };
+        break;
+      case "8":
+        newData = {
+          labels: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
+          datasets: data.datasets,
+        };
+        break;
+      default:
+        newData = data;
+        break;
+    }
+    setChartData(newData); //更新圖表數據
+  }, [timeRange]);
+  //篩選----
+
   const handleClick = (index) => {
     setActiveIndex(index); //讓畫面初始為0
     // setActiveIndex(activeIndex === index ? null : index);
@@ -271,7 +312,9 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <StyledPrimary>每月營收</StyledPrimary>
             {/* 篩選條件 */}
-            <StyledSelect>
+            <StyledSelect
+              onChange={(e) => handleTimeRangeChange(e.target.value)}
+            >
               <option value="3">近3年</option>
               <option value="5" selected>
                 近5年
@@ -282,7 +325,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
 
           {/* 圖表 */}
           <div style={{ padding: "20px" }}>
-            <Bar data={data} options={options} />
+            <Bar data={chartData} options={options} />
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <label style={{ marginRight: "10px" }}>
