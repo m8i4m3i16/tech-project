@@ -178,37 +178,9 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     setTimeRange(value);
   };
 
-  //   useEffect(() => {
-  //     let newData = {};
-  //     switch (timeRange) {
-  //       case "3":
-  //         newData = {
-  //           labels: [2021, 2022, 2023],
-  //           datasets: data.datasets,
-  //         };
-  //         break;
-  //       case "5":
-  //         newData = {
-  //           labels: [2019, 2020, 2021, 2022, 2023],
-  //           datasets: data.datasets,
-  //         };
-  //         break;
-  //       case "8":
-  //         newData = {
-  //           labels: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
-  //           datasets: data.datasets,
-  //         };
-  //         break;
-  //       default:
-  //         newData = data;
-  //         break;
-  //     }
-  //     setChartData(newData); //更新圖表數據
-  //   }, [timeRange]);
-
   useEffect(() => {
     let newData = {};
-    const currentYear = new Date().getFullYear(); // 获取当前年份
+    const currentYear = new Date().getFullYear();
 
     switch (timeRange) {
       case "3":
@@ -248,7 +220,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
         newData = data;
         break;
     }
-    setChartData(newData); //更新圖表數據
+    setChartData(newData);
   }, [timeRange]);
 
   const handleClick = (index) => {
@@ -256,7 +228,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     // setActiveIndex(activeIndex === index ? null : index);
   };
 
-  //串接每月營收API（只抓一隻股票）
+  //串接每月營收API
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -268,7 +240,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
             },
           };
         }
-        // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNSAyMTo1MDowMyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.lQvheRS_nKp6NruDqGymlBY4l8MSP3GWgdiMD4F9-30";
+
         const parameter = {
           dataset: "TaiwanStockMonthRevenue",
           data_id: 2330,
