@@ -14,7 +14,7 @@ export default function Home() {
   const [usStockIds, setUsStockIds] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
-  const [stockMatch, setStockMatch] = useState([]); //antd
+  const [selectedStock, setSelectedStock] = useState([]);
 
   //串接台美股API
   useEffect(() => {

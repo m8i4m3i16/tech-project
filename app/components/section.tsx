@@ -111,47 +111,54 @@ const StyledTrValue = styled("tr")(({ theme }) => ({
   textAlign: "center",
 }));
 
-//Graph
-const data = {
-  labels: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
-  datasets: [
-    {
-      type: "line",
-      label: "月均價",
-      data: [400, 250, 300, 750, 500, 920, 680, 800],
-      fill: false,
-      backgroundColor: "rgba(178, 34, 34, 1)",
-      borderColor: "rgba(178, 34, 34)",
-      tension: 0.1,
-      pointRadius: 0.5,
-    },
-    {
-      type: "bar",
-      label: "每月營收",
-      data: [200, 300, 400, 200, 600, 800, 450, 500],
-      backgroundColor: "rgba(250, 192, 19, 0.6)",
-      borderColor: "rgba(250, 192, 19)",
-      borderWidth: 1,
-      barThickness: 10,
-    },
-  ],
-};
-
-const options = {
-  plugins: {
-    title: {
-      display: true,
-      text: "千元",
-      align: "start",
-    },
-  },
-};
-
 const Section = ({ stockIds, stockNames, searchResults }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [foundStockName, setFoundStockName] = useState(null);
   const [foundStockId, setfoundStockId] = useState(null);
   const [monthlyStockData, setMonthlyStockData] = useState([]);
+
+  const monthlyLabels = monthlyStockData.map(
+    (monthData) =>
+      `${monthData.revenue_year}${monthData.revenue_month
+        .toString()
+        .padStart(2, "0")}`
+  );
+
+  //Graph
+  const data = {
+    labels: monthlyLabels,
+    datasets: [
+      {
+        type: "line",
+        label: "月均價",
+        data: [400, 250, 300, 750, 500, 920, 680, 800],
+        fill: false,
+        backgroundColor: "rgba(178, 34, 34, 1)",
+        borderColor: "rgba(178, 34, 34)",
+        tension: 0.1,
+        pointRadius: 0.5,
+      },
+      {
+        type: "bar",
+        label: "每月營收",
+        data: monthlyStockData.map((monthData) => monthData.revenue),
+        backgroundColor: "rgba(250, 192, 19, 0.6)",
+        borderColor: "rgba(250, 192, 19)",
+        borderWidth: 1,
+        barThickness: 10,
+      },
+    ],
+  };
+
+  const options = {
+    plugins: {
+      title: {
+        display: true,
+        text: "千元",
+        align: "start",
+      },
+    },
+  };
 
   //篩選
   const [timeRange, setTimeRange] = useState("5");
@@ -355,13 +362,19 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
 
           {/* 圖表 */}
           <div style={{ padding: "20px" }}>
-            <Bar
-              data={chartData}
-              options={options}
-              foundStockName={foundStockName}
-              foundStockId={foundStockId}
-            />
+            {foundStockName ? (
+              <>
+                <Bar
+                  data={chartData}
+                  options={options}
+                  monthlyStockData={monthlyStockData}
+                />
+              </>
+            ) : (
+              <Bar data={chartData} options={options} />
+            )}
           </div>
+
           <div style={{ display: "flex", justifyContent: "center" }}>
             <label style={{ marginRight: "10px" }}>
               <input
