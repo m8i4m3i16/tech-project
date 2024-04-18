@@ -61,14 +61,16 @@ export default function SearchBar({
     const regex = new RegExp(
       `^${text}\\d{0,3}$|^${text.toUpperCase()}[a-zA-Z]{0,4}$`
     );
-
-    //過濾符合正規表達式條件的股票代號及其對應的股票名稱
     const matchedStocks = stockIds.reduce((acc, id, index) => {
       if (regex.test(id.toString())) {
-        acc.push({ id, name: stockNames[index] });
+        const existingStock = acc.find((stock) => stock.id === id);
+        if (!existingStock) {
+          acc.push({ id, name: stockNames[index] });
+        }
       }
       return acc;
     }, []);
+
     setStockMatch(matchedStocks);
   };
 

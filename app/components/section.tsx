@@ -153,7 +153,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   const [foundStockId, setfoundStockId] = useState(null);
   const [monthlyStockData, setMonthlyStockData] = useState([]);
 
-  //篩選----
+  //篩選
   const [timeRange, setTimeRange] = useState("5");
   const [chartData, setChartData] = useState(data); //存儲圖表數據
 
@@ -162,11 +162,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     setTimeRange(value);
   };
 
-  // 根據所選擇的時間範圍更新圖表數據
   useEffect(() => {
-    // 根據timeRange更新圖表數據
-    // 這裡可以根據不同的時間範圍從後端獲取不同的數據，或者根據已有數據進行篩選
-    // 示範：根據timeRange從data中篩選相應的數據
     let newData = {};
     switch (timeRange) {
       case "3":
@@ -193,7 +189,6 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     }
     setChartData(newData); //更新圖表數據
   }, [timeRange]);
-  //篩選----
 
   const handleClick = (index) => {
     setActiveIndex(index); //讓side-bar畫面初始為每月營收
@@ -221,6 +216,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   //           }
   //         );
   //         const jsonData = await response.json();
+
   //         setMonthlyStockData(jsonData.data || []);
   //       } catch (error) {
   //         console.error("Error fetching stock data:", error);

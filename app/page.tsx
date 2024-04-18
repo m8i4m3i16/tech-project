@@ -17,53 +17,53 @@ export default function Home() {
   const [stockMatch, setStockMatch] = useState([]); //antd
 
   //串接台美股API
-  // useEffect(() => {
-  //   const fetchTaiwanStockData = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         "https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockInfo"
-  //       );
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch Taiwan stock data");
-  //       }
-  //       const jsonData = await response.json();
-  //       setTaiwanStockData(jsonData.data || []);
+  useEffect(() => {
+    const fetchTaiwanStockData = async () => {
+      try {
+        const response = await fetch(
+          "https://api.finmindtrade.com/api/v4/data?dataset=TaiwanStockInfo"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch Taiwan stock data");
+        }
+        const jsonData = await response.json();
+        setTaiwanStockData(jsonData.data || []);
 
-  //       if (jsonData && jsonData.data) {
-  //         const names = jsonData.data.map((i) => i.stock_name);
-  //         const ids = jsonData.data.map((i) => i.stock_id);
-  //         setTaiwanStockNames(names);
-  //         setTaiwanStockIds(ids);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching Taiwan stock data:", error);
-  //     }
-  //   };
-  //   const fetchUsStockData = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         "https://api.finmindtrade.com/api/v4/data?dataset=USStockInfo"
-  //       );
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch US stock data");
-  //       }
-  //       const jsonData = await response.json();
-  //       setUsStockData(jsonData.data || []);
+        if (jsonData && jsonData.data) {
+          const names = jsonData.data.map((i) => i.stock_name);
+          const ids = jsonData.data.map((i) => i.stock_id);
+          setTaiwanStockNames(names);
+          setTaiwanStockIds(ids);
+        }
+      } catch (error) {
+        console.error("Error fetching Taiwan stock data:", error);
+      }
+    };
+    const fetchUsStockData = async () => {
+      try {
+        const response = await fetch(
+          "https://api.finmindtrade.com/api/v4/data?dataset=USStockInfo"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch US stock data");
+        }
+        const jsonData = await response.json();
+        setUsStockData(jsonData.data || []);
 
-  //       if (jsonData && jsonData.data) {
-  //         const names = jsonData.data.map((i) => i.stock_name);
-  //         const ids = jsonData.data.map((i) => i.stock_id);
-  //         setUsStockNames(names);
-  //         setUsStockIds(ids);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching US stock data:", error);
-  //     }
-  //   };
+        if (jsonData && jsonData.data) {
+          const names = jsonData.data.map((i) => i.stock_name);
+          const ids = jsonData.data.map((i) => i.stock_id);
+          setUsStockNames(names);
+          setUsStockIds(ids);
+        }
+      } catch (error) {
+        console.error("Error fetching US stock data:", error);
+      }
+    };
 
-  //   fetchTaiwanStockData();
-  //   fetchUsStockData();
-  // }, []);
+    fetchTaiwanStockData();
+    fetchUsStockData();
+  }, []);
 
   const handleSearchResults = (results) => {
     setSearchResults(results);
