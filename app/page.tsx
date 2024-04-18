@@ -39,7 +39,6 @@ export default function Home() {
   //       console.error("Error fetching Taiwan stock data:", error);
   //     }
   //   };
-
   //   const fetchUsStockData = async () => {
   //     try {
   //       const response = await fetch(

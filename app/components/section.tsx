@@ -200,7 +200,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     // setActiveIndex(activeIndex === index ? null : index);
   };
 
-  //串接每月營收API（原始）
+  //串接每月營收API（只抓一隻股票）
   //   useEffect(() => {
   //     const fetchData = async () => {
   //       try {
@@ -359,7 +359,12 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
 
           {/* 圖表 */}
           <div style={{ padding: "20px" }}>
-            <Bar data={chartData} options={options} />
+            <Bar
+              data={chartData}
+              options={options}
+              foundStockName={foundStockName}
+              foundStockId={foundStockId}
+            />
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <label style={{ marginRight: "10px" }}>
