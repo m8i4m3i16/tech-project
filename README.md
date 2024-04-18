@@ -34,11 +34,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Additional Information
 
 #### 串接台、美股及每月營收三隻API，讓搜尋時，可以取得相關資訊
-- 搜尋區塊：輸入台、美股代號，會在下方空白處即時產生對應的資訊，同時生成自動聯想（輸入 Enter 將取消自動聯想）
+- 搜尋區塊：輸入台、美股代號，會在下方空白處即時產生對應的資訊，同時生成自動聯想  （輸入 Enter 將取消自動聯想）
 - 圖表區塊：即時呈現對應的資訊
 - 表格區塊：即時呈現對應的資訊
 
-#### 側邊欄位，實作Active，並使用localstorage讀取和存儲索引位置，且用滑鼠點擊，即可取消Active選取
+#### 側邊欄位實作Active，並使用localstorage讀取和存儲索引位置  （用滑鼠點擊，即可取消Active選取）
 
 #### Section區塊
 - 側邊欄位，對應圖表的每月營收，為網頁初始的Active狀態
