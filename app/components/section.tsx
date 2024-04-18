@@ -203,69 +203,36 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   };
 
   //串接每月營收API（只抓一隻股票）
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const token =
-  //           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNSAyMTo1MDowMyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.lQvheRS_nKp6NruDqGymlBY4l8MSP3GWgdiMD4F9-30";
-  //         const parameter = {
-  //           dataset: "TaiwanStockMonthRevenue",
-  //           data_id: 2330,
-  //           start_date: "2016-01-01",
-  //           end: "2023-12-31",
-  //         };
-  //         const response = await fetch(
-  //           `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}&data_id=${parameter.data_id}`,
-  //           {
-  //             headers: {
-  //               Authorization: `Bearer ${token}`,
-  //             },
-  //           }
-  //         );
-  //         const jsonData = await response.json();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const axiosConfig = {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
+        }
+        // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNSAyMTo1MDowMyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.lQvheRS_nKp6NruDqGymlBY4l8MSP3GWgdiMD4F9-30";
+        const parameter = {
+          dataset: "TaiwanStockMonthRevenue",
+          data_id: 2330,
+          start_date: "2016-01-01",
+          end: "2023-12-31",
+        };
+        const response = await fetch(
+          `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}&data_id=${parameter.data_id}`
+        );
+        const jsonData = await response.json();
 
-  //         setMonthlyStockData(jsonData.data || []);
-  //       } catch (error) {
-  //         console.error("Error fetching stock data:", error);
-  //       }
-  //     };
-  //     fetchData();
-  //   }, []);
-
-  //串接每月營收API（取得全部）
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const token =
-  //           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNSAyMTo1MDowMyIsInVzZXJfaWQiOiJjaGVyaXNoeW8iLCJpcCI6IjExNi4yNDEuMjEzLjE1OSJ9.lQvheRS_nKp6NruDqGymlBY4l8MSP3GWgdiMD4F9-30";
-
-  //         const allStockData = await Promise.all(
-  //           stockIds.map(async (id) => {
-  //             const parameter = {
-  //               dataset: "TaiwanStockMonthRevenue",
-  //               data_id: id,
-  //               start_date: "2016-01-01",
-  //               end: "2023-12-31",
-  //             };
-  //             const response = await fetch(
-  //               `https://api.finmindtrade.com/api/v4/data?dataset=${parameter.dataset}&start_date=${parameter.start_date}&end=${parameter.end}&data_id=${parameter.data_id}`,
-  //               {
-  //                 headers: {
-  //                   Authorization: `Bearer ${token}`,
-  //                 },
-  //               }
-  //             );
-  //             const jsonData = await response.json();
-  //             return jsonData.data || [];
-  //           })
-  //         );
-  //         setMonthlyStockData(allStockData);
-  //       } catch (error) {
-  //         console.error("Error fetching stock data:", error);
-  //       }
-  //     };
-  //     fetchData();
-  //   }, [stockIds]);
+        setMonthlyStockData(jsonData.data || []);
+      } catch (error) {
+        console.error("Error fetching stock data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (searchResults.length > 0 && stockIds.length > 0) {
