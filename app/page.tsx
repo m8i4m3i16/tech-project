@@ -14,7 +14,7 @@ export default function Home() {
   const [usStockIds, setUsStockIds] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
-  const [selectedStock, setSelectedStock] = useState([]);
+  const [stockMatch, setStockMatch] = useState([]);
 
   //串接台美股API
   useEffect(() => {
@@ -103,6 +103,8 @@ export default function Home() {
         stockIds={[...taiwanStockIds, ...usStockIds]}
         stockNames={[...taiwanStockNames, ...usStockNames]}
         handleSearchResults={handleSearchResults}
+        stockMatch={stockMatch}
+        setStockMatch={setStockMatch}
       />
       <div
         style={{
@@ -116,7 +118,7 @@ export default function Home() {
           stockIds={[...taiwanStockIds, ...usStockIds]}
           stockNames={[...taiwanStockNames, ...usStockNames]}
           searchResults={searchResults}
-          handleSearchResults={handleSearchResults}
+          stockMatch={stockMatch}
         />
       </div>
     </body>

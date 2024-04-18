@@ -42,5 +42,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 #### Section區塊
 - 側邊欄位，對應圖表的每月營收，為網頁初始的Active狀態
-- 圖表區塊：做出篩選功能：分別可以抓出近3年、近5年、近8年資料
 - 圖表區塊：點擊圖表中的「每月營收」或「月均價」，可自由呈現長條圖或折線圖
