@@ -117,22 +117,31 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
   const [foundStockId, setfoundStockId] = useState(null);
   const [monthlyStockData, setMonthlyStockData] = useState([]);
 
-  const monthlyLabels = monthlyStockData.map(
-    (monthData) =>
-      `${monthData.revenue_year}${monthData.revenue_month
+  const monthlyLabels = monthlyStockData.map((monthData) => {
+    if (monthData && monthData.revenue_year && monthData.revenue_month) {
+      return `${monthData.revenue_year}${monthData.revenue_month
         .toString()
-        .padStart(2, "0")}`
-  );
+        .padStart(2, "0")}`;
+    }
+    return "";
+  });
+
+  //計算股票月均價
+  const averagePriceData = monthlyStockData.map((monthData) => {
+    const totalRevenue = monthData.revenue; //月收
+    const tradingDays = 20; //假設每月交易天數為20
+    const averagePrice = totalRevenue / tradingDays; //月均價格
+    return averagePrice;
+  });
 
   //Graph
   const data = {
-    labels: monthlyLabels,
+    labels: monthlyStockData.map((monthData) => monthData.revenue_year),
     datasets: [
       {
         type: "line",
         label: "月均價",
-        data: [400, 250, 300, 750, 500, 920, 680, 800],
-        fill: false,
+        data: averagePriceData,
         backgroundColor: "rgba(178, 34, 34, 1)",
         borderColor: "rgba(178, 34, 34)",
         tension: 0.1,
@@ -169,24 +178,69 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
     setTimeRange(value);
   };
 
+  //   useEffect(() => {
+  //     let newData = {};
+  //     switch (timeRange) {
+  //       case "3":
+  //         newData = {
+  //           labels: [2021, 2022, 2023],
+  //           datasets: data.datasets,
+  //         };
+  //         break;
+  //       case "5":
+  //         newData = {
+  //           labels: [2019, 2020, 2021, 2022, 2023],
+  //           datasets: data.datasets,
+  //         };
+  //         break;
+  //       case "8":
+  //         newData = {
+  //           labels: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
+  //           datasets: data.datasets,
+  //         };
+  //         break;
+  //       default:
+  //         newData = data;
+  //         break;
+  //     }
+  //     setChartData(newData); //更新圖表數據
+  //   }, [timeRange]);
+
   useEffect(() => {
     let newData = {};
+    const currentYear = new Date().getFullYear(); // 获取当前年份
+
     switch (timeRange) {
       case "3":
         newData = {
-          labels: [2021, 2022, 2023],
+          labels: [currentYear - 2, currentYear - 1, currentYear],
           datasets: data.datasets,
         };
         break;
       case "5":
         newData = {
-          labels: [2019, 2020, 2021, 2022, 2023],
+          labels: [
+            currentYear - 4,
+            currentYear - 3,
+            currentYear - 2,
+            currentYear - 1,
+            currentYear,
+          ],
           datasets: data.datasets,
         };
         break;
       case "8":
         newData = {
-          labels: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023],
+          labels: [
+            currentYear - 7,
+            currentYear - 6,
+            currentYear - 5,
+            currentYear - 4,
+            currentYear - 3,
+            currentYear - 2,
+            currentYear - 1,
+            currentYear,
+          ],
           datasets: data.datasets,
         };
         break;
@@ -331,11 +385,7 @@ const Section = ({ stockIds, stockNames, searchResults }) => {
           <div style={{ padding: "20px" }}>
             {foundStockName ? (
               <>
-                <Bar
-                  data={chartData}
-                  options={options}
-                  monthlyStockData={monthlyStockData}
-                />
+                <Bar data={data} options={options} />
               </>
             ) : (
               <Bar data={chartData} options={options} />
